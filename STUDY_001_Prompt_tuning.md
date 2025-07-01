@@ -117,6 +117,74 @@ The same program structure works with any optimizer, demonstrating the plug-and-
 
 4. **Practical Flexibility**: Users can choose the right complexity level for their use case while maintaining the same simple interface.
 
+## Optimizer Selection: Coder's Responsibility vs. Automated Selection
+
+### Current State: Manual Selection Required
+
+**Yes, choosing the right optimizer is currently the coder's responsibility.** In your example:
+
+```python
+# Manual optimizer selection - coder must choose
+optimizer = dspy.BootstrapFewShot(metric=exact_match, max_bootstrapped_demos=3)
+```
+
+### Limited Automated Selection Options
+
+DSPy provides **very limited** automated optimizer selection:
+
+1. **MIPROv2 Auto Modes**: The only automated selection is within MIPROv2:
+   ```python
+   optimizer = dspy.MIPROv2(metric=exact_match, auto="light")  # or "medium", "heavy"
+   ```
+   This only configures hyperparameters, not optimizer type selection.
+
+2. **BetterTogether Meta-Optimizer**: Combines strategies but requires manual specification:
+   ```python
+   optimizer = dspy.BetterTogether(
+       metric=exact_match,
+       prompt_optimizer=BootstrapFewShotWithRandomSearch(metric=exact_match),
+       weight_optimizer=BootstrapFinetune(metric=exact_match)
+   )
+   ```
+
+### No Universal Optimizer Recommendation System
+
+DSPy **does not provide**:
+- ❌ Automatic optimizer selection based on task type
+- ❌ Recommendation system for choosing optimizers
+- ❌ "Try all optimizers" functionality
+- ❌ Performance-based optimizer selection
+
+### Selection Guidance from Documentation
+
+The documentation provides some guidance:
+
+| Use Case | Recommended Optimizer | Rationale |
+|----------|----------------------|-----------|
+| **Simple tasks** | `LabeledFewShot` | Direct few-shot from labeled data |
+| **General optimization** | `BootstrapFewShot` | Good balance of performance/complexity |
+| **Advanced optimization** | `MIPROv2` | State-of-the-art multi-stage optimization |
+| **Instruction refinement** | `COPRO` | Iterative instruction improvement |
+| **Audio/expensive tokens** | `BootstrapFewShotWithRandomSearch` | Conservative with 0-2 examples |
+| **Combined approach** | `BetterTogether` | Prompt + weight optimization |
+
+### Practical Selection Strategy
+
+**Recommended progression for coders:**
+
+1. **Start Simple**: `LabeledFewShot` for baseline
+2. **Add Bootstrapping**: `BootstrapFewShot` for better examples
+3. **Scale Up**: `MIPROv2` with `auto="light"` for advanced optimization
+4. **Specialize**: Choose specific optimizers based on needs
+
+### Future Opportunities
+
+The lack of automated optimizer selection represents a **significant opportunity** for DSPy to:
+- Implement task-type based recommendations
+- Provide "auto-select best optimizer" functionality
+- Create performance-based optimizer ranking systems
+- Develop meta-optimizers that try multiple strategies
+
 ## Conclusion
 
-DSPy's optimization system represents a comprehensive approach to prompt engineering, offering everything from simple few-shot selection to sophisticated reinforcement learning. The modular, plug-and-play architecture allows users to experiment with different strategies easily while maintaining consistent interfaces and evaluation frameworks.
+DSPy's optimization system represents a comprehensive approach to prompt engineering, offering everything from simple few-shot selection to sophisticated reinforcement learning. However, **optimizer selection remains a manual, coder-driven decision** with limited automation. The modular, plug-and-play architecture allows users to experiment with different strategies easily, but requires domain knowledge to choose appropriately. This represents both a current limitation and a future opportunity for the framework.
