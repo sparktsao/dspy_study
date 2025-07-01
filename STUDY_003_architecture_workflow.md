@@ -85,13 +85,45 @@ evaluator = dspy.Evaluate(devset=test_data, metric=exact_match)
 | **Fine-tuning** | `BootstrapFinetune`, `GRPO` |
 | **Meta** | `BetterTogether`, `Ensemble` |
 
-### 5. **Propose** - Content Generation
-**Purpose**: Generate instructions and demonstrations
+### 5. **Propose** - Search Space Generation
+**Purpose**: Generate candidate instructions and demonstrations for optimization
 
 | Component | Responsibility |
 |-----------|----------------|
-| `GroundedProposer` | Generate contextually grounded proposals |
-| `dataset_summary_generator` | Create dataset summaries for optimization |
+| `GroundedProposer` | **Core search space generator** - creates instruction candidates |
+| `GenerateModuleInstruction` | LLM-based instruction generation with context awareness |
+| `DescribeProgram` | Analyzes program structure for context-aware proposals |
+| `dataset_summary_generator` | Creates dataset summaries to inform proposal generation |
+
+**Key Features of GroundedProposer:**
+- **Program-aware**: Analyzes DSPy program structure and purpose
+- **Data-aware**: Uses dataset summaries to understand task context  
+- **History-aware**: Considers previous instruction attempts and scores
+- **Context-aware**: Uses task demonstrations to ground proposals
+- **Tip-based**: Applies different generation strategies (creative, simple, persona, etc.)
+
+**Search Space Generation Process:**
+```python
+# GroundedProposer creates multiple instruction candidates
+proposer = GroundedProposer(
+    prompt_model=lm,
+    program=student_program,
+    trainset=training_data,
+    program_aware=True,      # Analyze program structure
+    use_dataset_summary=True, # Use data context
+    use_instruct_history=True # Learn from previous attempts
+)
+
+# Generates N candidate instructions per predictor
+instruction_candidates = proposer.propose_instructions_for_program(
+    trainset=trainset,
+    program=program, 
+    demo_candidates=demo_sets,
+    trial_logs=previous_attempts,
+    N=10,  # Number of candidates to generate
+    T=0.7  # Temperature for generation
+)
+```
 
 ### 6. **Primitives** - Core Data Structures
 **Purpose**: Fundamental building blocks
