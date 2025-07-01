@@ -22,7 +22,7 @@ DSPy provides **15+ distinct optimization strategies**, each with different theo
 | **LabeledFewShot** | Simple few-shot learning | `dspy/teleprompt/vanilla.py` | **Few-shot**: Direct sampling from labeled training examples, no bootstrapping or optimization |
 | **BootstrapFewShotWithRandomSearch** | Bootstrap + Random search | `dspy/teleprompt/random_search.py` | **Context-based + Random search**: Combines bootstrapping with random hyperparameter exploration |
 | **BootstrapFewShotWithOptuna** | Bootstrap + Bayesian optimization | `dspy/teleprompt/teleprompt_optuna.py` | **Context-based + Bayesian optimization**: Uses Optuna for sophisticated demo selection optimization |
-| **BootstrapFinetune** | Bootstrap + Model fine-tuning | `dspy/teleprompt/bootstrap_finetune.py` | **Context-based + Fine-tuning**: Generates training data from execution traces for model fine-tuning |
+| **BootstrapFinetune** | Bootstrap + Model fine-tuning | `dspy/teleprompt/bootstrap_finetune.py` | **Context-based + Fine-tuning**: Generates training data from execution traces and fine-tunes the actual LLM model weights (not just prompts) |
 | **GRPO** | Gradient-based Reward Policy Optimization (Reinforcement Learning) | `dspy/teleprompt/grpo.py` | **RL-based + Fine-tuning**: Uses policy gradients and reward signals for model optimization, RLHF-style approach |
 | **KNNFewShot** | K-Nearest Neighbors + Embedding similarity | `dspy/teleprompt/knn_fewshot.py` | **Embedding-based + Few-shot**: Uses vector similarity to select most relevant examples for each query |
 | **InferRules** | Rule induction + Pattern discovery | `dspy/teleprompt/infer_rules.py` | **LLM rewrite + Pattern-based**: Automatically discovers natural language rules from examples, extends BootstrapFewShot |
