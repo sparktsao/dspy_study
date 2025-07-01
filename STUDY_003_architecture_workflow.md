@@ -243,19 +243,49 @@ graph TD
     I --> J[Return Result]
 ```
 
-### 3. Optimization Strategy Flow
+### 3. Optimization Strategy Flow (with Propose)
 ```mermaid
 graph TD
     A[Teleprompter.compile] --> B[Bootstrap Examples]
-    B --> C[Generate Candidates]
-    C --> D[Evaluate Candidates]
-    D --> E[Select Best]
-    E --> F[Update Predictor]
-    F --> G[Return Optimized]
+    B --> C[Propose: Generate Search Space]
+    C --> D[Propose: Analyze Program Structure]
+    D --> E[Propose: Create Dataset Summary]
+    E --> F[Propose: Review History]
+    F --> G[Propose: Generate Candidates]
+    G --> H[Evaluate Candidates]
+    H --> I[Select Best]
+    I --> J[Update Predictor]
+    J --> K[Return Optimized]
     
-    D --> H[Metric Function]
-    H --> I[Score Calculation]
-    I --> D
+    H --> L[Metric Function]
+    L --> M[Score Calculation]
+    M --> H
+```
+
+### 4. Propose Module: Search Space Generation Detail
+```mermaid
+graph TD
+    A[GroundedProposer] --> B[Program Analysis]
+    B --> C[DescribeProgram]
+    C --> D[DescribeModule]
+    
+    A --> E[Data Analysis]
+    E --> F[Dataset Summary]
+    F --> G[Task Context]
+    
+    A --> H[History Analysis]
+    H --> I[Previous Instructions]
+    I --> J[Performance Scores]
+    
+    A --> K[Instruction Generation]
+    K --> L[GenerateModuleInstruction]
+    L --> M[Apply Tips/Strategies]
+    M --> N[LLM Generation]
+    N --> O[Candidate Instructions]
+    
+    B --> K
+    E --> K
+    H --> K
 ```
 
 ## Integration Workflow: The Complete Picture
