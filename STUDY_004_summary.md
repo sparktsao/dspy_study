@@ -8,7 +8,7 @@ I had the incredible opportunity to attend the Databricks AI Summit, where I lea
 
 DSPy's core mission resonated deeply with me: **eliminate the tedious prompt hacking process** and empower GenAI developers to focus on what truly matters - defining clear **Input/Output specifications** and robust **evaluation metrics**. But I was curious about the magic happening under the hood.
 
-## Hands-On Discovery: Schema Mapping Optimization
+## The Initial Experiment: More Questions Than Answers
 
 I started with a practical experiment - using DSPy to optimize a schema mapping problem (Microsoft Defender → Trend Micro field mapping). The results were immediate and impressive: DSPy automatically enhanced my prompts with few-shot examples from my training data, transforming a simple instruction into a rich, contextual prompt.
 
@@ -22,6 +22,10 @@ Simple prompt, no examples
 Rich prompt with 5 carefully selected few-shot examples
 Same model, dramatically better results!
 ```
+
+But this success sparked a deeper question: **Can DSPy do MORE than just adding few-shot examples? What other magic lies beneath the surface?** 
+
+This curiosity drove me to embark on what I call "Vibe-Code-Reading" - diving deep into the codebase to understand the true scope of DSPy's capabilities.
 
 ## Three Rounds of "Vibe-Code-Reading" 🔍
 
