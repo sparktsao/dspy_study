@@ -120,6 +120,7 @@ sequenceDiagram
     participant Signature
     participant Predictor as Predict
     participant Optimizer as Teleprompter
+    participant Proposer as Propose
     participant Evaluator as Evaluate
     participant LLM
     participant Adapter
@@ -136,26 +137,42 @@ sequenceDiagram
     
     Note over User: 2. Optimization Phase
     User->>Optimizer: Initialize optimizer
-    Note right of Optimizer: optimizer = dspy.BootstrapFewShot(<br/>metric=exact_match)
+    Note right of Optimizer: optimizer = dspy.MIPROv2(<br/>metric=exact_match)
     
     User->>Optimizer: Start optimization
     Optimizer->>Optimizer: compile(predictor, trainset)
     
-    loop For each training example
-        Optimizer->>Predictor: Execute on example
-        Predictor->>Adapter: Format prompt
-        Adapter->>LLM: Send formatted request
-        LLM-->>Adapter: Return completion
-        Adapter-->>Predictor: Parse response
-        Predictor-->>Optimizer: Return prediction
+    Note over Optimizer: Search Space Generation
+    Optimizer->>Proposer: Generate instruction candidates
+    Proposer->>Proposer: Analyze program structure
+    Proposer->>Proposer: Create dataset summary
+    Proposer->>Proposer: Review instruction history
+    Proposer->>LLM: Generate new instructions
+    LLM-->>Proposer: Return instruction candidates
+    Proposer-->>Optimizer: Return search space
+    
+    Note over Optimizer: Candidate Evaluation Loop
+    loop For each candidate instruction
+        Optimizer->>Predictor: Update with candidate instruction
         
-        Optimizer->>Evaluator: Evaluate prediction
-        Evaluator->>User: Apply metric function
-        User-->>Evaluator: Return score
-        Evaluator-->>Optimizer: Return evaluation result
+        loop For each training example
+            Optimizer->>Predictor: Execute on example
+            Predictor->>Adapter: Format prompt with candidate
+            Adapter->>LLM: Send formatted request
+            LLM-->>Adapter: Return completion
+            Adapter-->>Predictor: Parse response
+            Predictor-->>Optimizer: Return prediction
+            
+            Optimizer->>Evaluator: Evaluate prediction
+            Evaluator->>User: Apply metric function
+            User-->>Evaluator: Return score
+            Evaluator-->>Optimizer: Return evaluation result
+        end
+        
+        Optimizer->>Optimizer: Calculate candidate score
     end
     
-    Optimizer->>Optimizer: Select best examples/instructions
+    Optimizer->>Optimizer: Select best instruction/examples
     Optimizer->>Predictor: Update with optimized prompts
     Optimizer-->>User: Return optimized predictor
     
