@@ -30,7 +30,7 @@ DSPy provides **15+ distinct optimization strategies**, each with different theo
 | **SignatureOptimizer** | Signature-specific COPRO variant | `dspy/teleprompt/signature_opt.py` | **LLM rewrite + Signature-focused**: Specialized version of COPRO for optimizing input/output field descriptions |
 | **BetterTogether** | Meta-optimization + Strategy combination | `dspy/teleprompt/bettertogether.py` | **Meta-optimization**: Combines multiple optimization strategies (prompt + weight optimization) in a unified framework |
 | **Ensemble** | Model ensemble + Voting/Averaging | `dspy/teleprompt/ensemble.py` | **Ensemble-based**: Combines multiple optimized programs using voting or averaging for final predictions |
-| **AvatarOptimizer** | Feedback-based instruction generation + Comparative evaluation | `dspy/teleprompt/avatar_optimizer.py` | **LLM rewrite + Feedback-based**: Uses comparative evaluation between programs to generate improved instructions |
+| **AvatarOptimizer** | Feedback-based instruction generation + Comparative evaluation for tool-using agents | `dspy/teleprompt/avatar_optimizer.py` | **LLM rewrite + Agent-based**: Optimizes instructions for Avatar agents that use tools, compares positive/negative examples to generate feedback and improve tool usage instructions |
 
 ## Detailed Analysis
 
